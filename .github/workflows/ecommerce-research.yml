@@ -1,0 +1,40 @@
+name: E-commerce research checks
+
+on:
+  push:
+    branches:
+      - main
+      - feat/ecommerce-product-research
+    paths:
+      - "extensions/ecommerce-research/**"
+      - ".github/workflows/ecommerce-research.yml"
+  pull_request:
+    paths:
+      - "extensions/ecommerce-research/**"
+      - ".github/workflows/ecommerce-research.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  research-toolkit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Check JavaScript syntax
+        run: node --check extensions/ecommerce-research/score-products.mjs
+
+      - name: Run unit tests
+        run: node extensions/ecommerce-research/test.mjs
+
+      - name: Run sample CSV end to end
+        run: |
+          node extensions/ecommerce-research/score-products.mjs extensions/ecommerce-research/sample-products.csv --out /tmp/ranked-products.csv
+          node --input-type=module -e "import { readFileSync } from 'node:fs'; const rows = readFileSync('/tmp/ranked-products.csv', 'utf8').trim().split(/\r?\n/); if (rows.length !== 4) throw new Error('Expected header plus 3 ranked products, got ' + rows.length); if (!rows[0].includes('opportunity_score')) throw new Error('Opportunity score column missing'); console.log('Sample CSV end-to-end check passed.');"
