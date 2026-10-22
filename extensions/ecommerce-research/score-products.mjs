@@ -87,6 +87,27 @@ export function rankProducts(records) {
 
     if (!record.product) throw new Error(`Row ${record._row}: product cannot be empty.`);
 
+    const sourceUrl = (record.source_url ?? "").trim();
+    const observedAt = (record.observed_at ?? "").trim();
+    const evidenceNotes = (record.evidence_notes ?? "").trim();
+    if (sourceUrl) {
+      let parsedUrl;
+      try {
+        parsedUrl = new URL(sourceUrl);
+      } catch {
+        throw new Error(`Row ${record._row}: source_url must be a valid HTTP or HTTPS URL.`);
+      }
+      if (!["http:", "https:"].includes(parsedUrl.protocol)) {
+        throw new Error(`Row ${record._row}: source_url must use HTTP or HTTPS.`);
+      }
+    }
+    if (observedAt && !/^\\d{4}-\\d{2}-\\d{2}$/.test(observedAt)) {
+      throw new Error(`Row ${record._row}: observed_at must use YYYY-MM-DD format.`);
+    }
+    if (observedAt && Number.isNaN(Date.parse(`${observedAt}T00:00:00Z`))) {
+      throw new Error(`Row ${record._row}: observed_at must be a valid calendar date.`);
+    }
+
     const platformFees = sellingPrice * feePct / 100;
     const returnRisk = sellingPrice * returnPct / 100;
     const contribution = sellingPrice - sourcingCost - shippingCost - platformFees - returnRisk;
@@ -100,6 +121,9 @@ export function rankProducts(records) {
     return {
       product: record.product,
       category: record.category ?? "",
+      source_url: sourceUrl,
+      observed_at: observedAt,
+      evidence_notes: evidenceNotes,
       selling_price: round(sellingPrice),
       estimated_contribution_inr: round(contribution),
       estimated_margin_pct: round(marginPct),
