@@ -104,7 +104,8 @@ export function rankProducts(records) {
     if (observedAt && !/^\\d{4}-\\d{2}-\\d{2}$/.test(observedAt)) {
       throw new Error(`Row ${record._row}: observed_at must use YYYY-MM-DD format.`);
     }
-    if (observedAt && Number.isNaN(Date.parse(`${observedAt}T00:00:00Z`))) {
+    if (observedAt && (Number.isNaN(Date.parse(`${observedAt}T00:00:00Z`))
+      || new Date(`${observedAt}T00:00:00Z`).toISOString().slice(0, 10) !== observedAt)) {
       throw new Error(`Row ${record._row}: observed_at must be a valid calendar date.`);
     }
 
