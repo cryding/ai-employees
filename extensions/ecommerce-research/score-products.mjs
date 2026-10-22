@@ -101,7 +101,7 @@ export function rankProducts(records) {
         throw new Error(`Row ${record._row}: source_url must use HTTP or HTTPS.`);
       }
     }
-    if (observedAt && !/^\\d{4}-\\d{2}-\\d{2}$/.test(observedAt)) {
+    if (observedAt && !/^\d{4}-\d{2}-\d{2}$/.test(observedAt)) {
       throw new Error(`Row ${record._row}: observed_at must use YYYY-MM-DD format.`);
     }
     if (observedAt && (Number.isNaN(Date.parse(`${observedAt}T00:00:00Z`))
