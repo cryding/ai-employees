@@ -51,5 +51,9 @@ assert.throws(
   () => rankProducts([{ ...products[0], observed_at: "20-10-2026" }]),
   /observed_at must use YYYY-MM-DD format/,
 );
+assert.throws(
+  () => rankProducts([{ ...products[0], observed_at: "2026-02-31" }]),
+  /observed_at must be a valid calendar date/,
+);
 
 console.log("E-commerce research tests passed.");
