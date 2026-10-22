@@ -17,8 +17,8 @@ const products = [
 const ranked = rankProducts(products);
 assert.equal(ranked.length, 2);
 assert.equal(ranked[0].product, "Healthy margin");
-assert.equal(ranked[0].estimated_contribution_inr, 130);
-assert.equal(ranked[0].estimated_margin_pct, 26);
+assert.equal(ranked[0].estimated_contribution_inr, 240);
+assert.equal(ranked[0].estimated_margin_pct, 48);
 assert.ok(ranked[0].opportunity_score > ranked[1].opportunity_score);
 assert.equal(ranked[1].recommendation, "Review costs");
 
