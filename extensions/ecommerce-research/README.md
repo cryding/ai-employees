@@ -34,8 +34,11 @@ node extensions/ecommerce-research/score-products.mjs input.csv --out ranked-pro
 - `demand_score`: manually researched demand signal from 0 to 100
 - `competition_score`: competition intensity from 0 to 100, where higher means more competition
 - `data_confidence`: confidence in the evidence from 0 to 100
+- `source_url` (optional): HTTP or HTTPS URL for the evidence
+- `observed_at` (optional): date the evidence was checked, in `YYYY-MM-DD` format
+- `evidence_notes` (optional): short explanation of what the source supports
 
-The scores are research prioritization aids, not forecasts or guarantees. Keep the source URL and observation date in your research notes before making a purchasing decision.
+The scores are research prioritization aids, not forecasts or guarantees. Keep the source URL, observation date and evidence notes with every real research record before making a purchasing decision. The report preserves these fields so reviewers can trace each recommendation.
 
 ## Ranking method
 
